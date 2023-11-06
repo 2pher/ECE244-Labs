@@ -12,18 +12,52 @@ RegisterList::RegisterList() {
 
 RegisterList::~RegisterList() {
   // Delete all registers in the list
+  if (head != nullptr) {
+    while (head != nullptr) {
+      Register* temp = head;
+      head = head->get_next();
+      delete temp;
+    }
+  }
 }
 
-Register* RegisterList::get_head() {  }
+Register* RegisterList::get_head() { return head; }
 
 int RegisterList::get_size() { 
-  // return number of registers 
+  // return number of registers
+  int num = 0
+  if (head == nullptr) {
+    return num;
+  } else {
+    Register* temp = head;
+    while (temp != nullptr) {
+      num ++;
+      temp = temp->get_next();
+    }
+    return num;
+  }
 }
 
 
 Register* RegisterList::get_min_items_register() {
   // loop all registers to find the register with least number of items
-  
+  if (head == nullptr) {
+    return nullptr;
+  } else {
+    // Create two temporary Register* classes to compare item values
+    Register* leastItemReg = head;
+    Register* temp = head->get_next();
+    // Access items in queue
+    int leastItems = head->get_queue_list()->get_items();
+    while (temp != nullptr) {
+      if (temp->get_queue_list()->get_items() < leastItems) {
+        leastItems = temp->get_queue_list()->get_items();
+        leastItemReg = temp;
+      }
+      temp = temp->get_next();
+    }
+    return leastItemReg;
+  }
 }
 
 Register* RegisterList::get_free_register() {
