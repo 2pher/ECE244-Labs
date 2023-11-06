@@ -15,7 +15,19 @@ Customer* QueueList::get_head() {  }
 void QueueList::enqueue(Customer* customer) {
   // a customer is placed at the end of the queue
   // if the queue is empty, the customer becomes the head
-  
+  Customer* newCustomer = customer;
+  newCustomer->set_next(nullptr);
+  // If list is empty, set newCustomer to queue head
+  if (head == nullptr) {
+    head = newCustomer;
+  } else {
+    // Traverse to the end of queue list then insert customer
+    Customer* temp = head;
+    while(temp->get_next() != nullptr) {
+      temp = temp->getnext();
+    }
+    temp->set_next(newCustomer)
+  }  
 }
 
 Customer* QueueList::dequeue() {
