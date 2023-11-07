@@ -40,18 +40,29 @@ void Register::set_availableTime(double availableSince) {
 double Register::calculateDepartTime() {
   // Get the departure time of the first customer in the queue
   // returns -1 if no customer is in the queue
+  double departTime = -1;
   if (queue == nullptr) {
-    return -1;
-  } else {
-    double departTime = get_secPerItem() * queue->get_items();
     return departTime;
+  } else {
+    // NEED TO REVIEW
+    if (queue->get_head()->get_arrivalTime() <= availableTime) { // REVIEW IF THIS IS LEGAL
+      departTime = secPerItem * queue->get_items();
+    } else {
+      // Customer arrives AFTER register becomes available
+      departTime = 
+    }
   }
 }
 
 void Register::departCustomer(QueueList* doneList) {
   // dequeue the head, set last dequeue time, add to doneList,
   // update availableTime of the register
-  
+  if (queue == nullptr) {
+    return nullptr;
+  } else {
+
+  }
+
   
 }
 

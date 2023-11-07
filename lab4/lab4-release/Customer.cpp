@@ -33,7 +33,7 @@ void Customer::set_next(Customer* nextCustomer) { next = nextCustomer; }
 void Customer::print() {
   cout << "Arrival time: " << arrivalTime << std::endl;
   if (departureTime != -1) {
-    cout << "Departure time: " << departureTime << std::endl;
+    cout  << "Departure time: " << departureTime << std::endl;
   } else {
     cout << "Departure time: "
          << "N/A" << std::endl;

@@ -15,18 +15,17 @@ Customer* QueueList::get_head() { return head; }
 void QueueList::enqueue(Customer* customer) {
   // a customer is placed at the end of the queue
   // if the queue is empty, the customer becomes the head
-  Customer* newCustomer = customer;
   newCustomer->set_next(nullptr);
   // If list is empty, set newCustomer to queue head
   if (head == nullptr) {
-    head = newCustomer;
+    head = customer;
   } else {
     // Traverse to the end of queue list then insert customer
     Customer* temp = head;
     while(temp->get_next() != nullptr) {
       temp = temp->getnext();
     }
-    temp->set_next(newCustomer)
+    temp->set_next(customer)
   }  
 }
 
@@ -37,7 +36,7 @@ Customer* QueueList::dequeue() {
   if (head == nullptr) {
     return nullptr;
   } else {
-    // 
+    // Set head to head->next, return old head
     Customer* dequeuedCustomer = head;
     head = head->get_next();
     return dequeudCustomer;
@@ -52,6 +51,7 @@ int QueueList::get_items() {
     return totalItems;
    } else {
     while (customer != nullptr) {
+      // Loop through linked list and add total number of items
       totalItems += customer->get_numofItems();
       customer = customer->get_next();
     }
