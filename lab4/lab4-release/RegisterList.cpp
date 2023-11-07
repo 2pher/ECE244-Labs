@@ -12,10 +12,9 @@ RegisterList::RegisterList() {
 
 RegisterList::~RegisterList() {
   // Delete all registers in the list
-  Register* reg = head;
-  while (reg != nullptr) {
-    Register* temp = reg;
-    reg = reg->get_next();
+  while (head != nullptr) {
+    Register* temp = head;
+    head = head->get_next();
     delete temp;
   }
 }
@@ -26,6 +25,7 @@ int RegisterList::get_size() {
   // return number of registers
   int num = 0
   if (head == nullptr) {
+    // No registers, return 0
     return num;
   } else {
     RegisterList* temp = head;
@@ -55,6 +55,7 @@ Register* RegisterList::get_min_items_register() {
       }
       temp = temp->get_next();
     }
+    // Isolate register from rest of list
     leastItemReg->set_next(nullptr);
     return leastItemReg;
   }
@@ -94,9 +95,7 @@ void RegisterList::enqueue(Register* newRegister) {
 bool RegisterList::foundRegister(int ID) {
   // look for a register with the given ID
   // return true if found, false otherwise
-  if (head == nullptr) {
-    return false;
-  } else {
+  if (head != nullptr) {
     Register* temp = head;
     while(temp != nullptr) {
       if (temp->get_ID() == ID) {
@@ -105,26 +104,26 @@ bool RegisterList::foundRegister(int ID) {
       temp = temp->get_next();
     }
   }
+  // ID did not match, return false;
+  return false;
 }
 
 Register* RegisterList::dequeue(int ID) {
   // dequeue the register with given ID
   // return the dequeued register
   // return nullptr if register was not found
-  if (head == nullptr) {
-    return nullptr;
-  } else {
+  if (head != nullptr) {
     Register* temp = nullptr;
     Register* dequeuedReg = head;
     while (dequeuedReg != nullptr) {
       if (dequeuedReg->get_ID() == ID) {
         // Check if temp == nullptr, meaning if head is matching ID
-        if (temp != nullptr) {
-          // temp reg skips over the dequeued reg to the next reg in list
-          temp->set_next(dequeuedReg->get_next());
-        } else {
+        if (temp == nullptr) {
           // ID matches head, set new head to next and remove current head
           set_head(dequeuedReg->get_next());
+        } else {
+          // temp reg skips over the dequeued reg to the next reg in list
+          temp->set_next(dequeuedReg->get_next());
         }
         // Isolate dequeuedReg by setting next to nullptr
         dequeuedReg->set_next(nullptr);
@@ -134,8 +133,8 @@ Register* RegisterList::dequeue(int ID) {
       temp = dequeuedReg;
       dequeuedReg = dequeuedReg->get_next();
     }
-    return nullptr; // No register found; return nullptr
   }
+  return nullptr; // No register found; return nullptr
 }
 
 Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
@@ -149,11 +148,13 @@ Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
     double minDepartTime = temp->calculateDepartTime();
     while (temp != nullptr) {
       if (temp->calculateDepartTime() < minDepartTime) {
+        // Lower depart time is found
         minDepartTime = temp->calculateDepartTime();
         minDepartTimeReg = temp;
       }
       temp = temp->get_next();
     }
+    // Isolate the register
     minDepartTimeReg->set_next(nullptr);
     return minDepartTimeReg;
   }

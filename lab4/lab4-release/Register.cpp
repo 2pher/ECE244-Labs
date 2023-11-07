@@ -41,29 +41,35 @@ double Register::calculateDepartTime() {
   // Get the departure time of the first customer in the queue
   // returns -1 if no customer is in the queue
   double departTime = -1;
-  if (queue == nullptr) {
-    return departTime;
-  } else {
-    // NEED TO REVIEW
-    if (queue->get_head()->get_arrivalTime() <= availableTime) { // REVIEW IF THIS IS LEGAL
-      departTime = secPerItem * queue->get_items();
+  if (queue != nullptr) {
+    // Customer has already been in line by time register becomes available; add reg available time
+    if (queue->get_head()->get_arrivalTime() <= availableTime) {
+      departTime = (secPerItem * queue->get_head()->get_numOfItems()) + overheadPerCustomer + availableTime;
     } else {
-      // Customer arrives AFTER register becomes available
-      departTime = 
+      // Customer arrives AFTER register becomes available; add arrival time instead
+      departTime = (secPerItem * queue->get_head()->get_numOfItems()) + overheadPerCustomer + queue->get_head()->get_arrivalTime();
     }
   }
+  return departTime;
 }
 
 void Register::departCustomer(QueueList* doneList) {
   // dequeue the head, set last dequeue time, add to doneList,
   // update availableTime of the register
-  if (queue == nullptr) {
-    return nullptr;
-  } else {
-
+  if (queue != nullptr) {
+    // Calculate depart time of customer
+    double departTime = calculateDepartTime();
+    // Set departure time of customer
+    queue->get_head()->set_departureTime(departTime);
+    // Dequeue customer
+    QueueList* dequeuedCustomer = queue->dequeue();
+    // Enqueue the dequeued customer to done list
+    doneList->enqueue(dequeuedCustomer);
+    // Set the register's available time to time which customer was dequeued
+    availableTime = departTime;
+    return;
   }
-
-  
+  doneList->enqueue(nullptr);
 }
 
 void Register::print() {
