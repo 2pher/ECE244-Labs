@@ -111,8 +111,27 @@ void addCustomer(stringstream &lineStream, string mode) {
   }
   // Depending on the mode of the simulation (single or multiple),
   // add the customer to the single queue or to the register with
-  // fewest items
+  // fewest
+  expTimeElapsed += timeElapsed;
+  Customer* customer = new Customer(expTimeElapsed, items);
+  systemUpdate(mode); // Check for any customer departures BEFORE adding a customer
+  cout << "A customer entered" << endl; // Default line for all customer entries
+ 
+  // If mode == single, put into single queue
+  if (mode == "single") {
+    // Queue customer in single queue
+    singleQueue->enqueue(customer);
+    queueSingleCustomers();
+  }
   
+  // If mode == multiple, find reg with least items and place into its reg queue
+  if (mode == "multiple") {
+    // Identify the register with the fewest items
+    Register* minItemsReg = registerList->get_min_items_register();
+    // Queue customer in register queue
+    minItemsReg->get_queue_list()->enqueue(customer);
+    cout << "Queued a customer with quickest register" << minItemsReg->get_ID() << endl;
+  }
 }
 
 void parseRegisterAction(stringstream &lineStream, string mode) {
@@ -148,6 +167,7 @@ void openRegister(stringstream &lineStream, string mode) {
   // If we were simulating a single queue, 
   // and there were customers in line, then 
   // assign a customer to the new register
+    
   
 }
 
@@ -198,5 +218,34 @@ bool foundMoreArgs(stringstream &lineStream) {
     return false;
   } else {
     return true;
+  }
+}
+ 
+void systemUpdate(string mode) {
+  RegisterList* temp = calculateMinDepartTimeRegister(expTimeElapsed);
+  // We need to add departures of customer to done list in timely order
+  while (temp != nullptr) {
+    double departTime = temp->calculateDepartTime();
+    if (departTime >= expTimeElapsed) {
+      temp->departCustomer(doneList);
+      cout << "Departed a customer at register ID " << temp->get_ID() << " at " << departTime << endl;
+
+      if (mode == "single") {
+      // For single queue, we need to add head of single queue list to head of free register queue
+        queueSingleCustomers();
+      }
+    }
+    temp = calculateMinDepartTimeRegister(expTimeElapsed);
+  }
+}
+
+void queueSingleCustomers() {
+  if (registerList->get_free_register() != nullptr) {
+    cout << "Queued a customer with free register " << registerList->get_free_register()->get_ID() << endl;
+    // Send single queue's head to the head of free reg's queue; dequeue head of single queue
+    registerList->get_free_register()->get_queue_list()->enqueue(singleQueue->dequeue());
+  } else {
+    // Customer is not head of single queue, there are no free regs available
+    cout << "No free registers" << endl;
   }
 }
