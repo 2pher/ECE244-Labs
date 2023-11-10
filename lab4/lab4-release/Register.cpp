@@ -18,7 +18,7 @@ Register::Register(int id, double timePerItem, double overhead,
 
 Register::~Register() { }
 
-QueueList* Register::get_queue_list() { return head; }
+QueueList* Register::get_queue_list() { return queue; }
 
 Register* Register::get_next() { return next; }
 
@@ -61,10 +61,8 @@ void Register::departCustomer(QueueList* doneList) {
     double departTime = calculateDepartTime();
     // Set departure time of customer
     queue->get_head()->set_departureTime(departTime);
-    // Dequeue customer
-    QueueList* dequeuedCustomer = queue->dequeue();
-    // Enqueue the dequeued customer to done list
-    doneList->enqueue(dequeuedCustomer);
+    // Dequeue customer and enqueue to done list
+    doneList->enqueue(queue->dequeue());
     // Set the register's available time to time which customer was dequeued
     availableTime = departTime;
     return;

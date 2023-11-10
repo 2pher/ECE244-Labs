@@ -23,12 +23,12 @@ Register* RegisterList::get_head() { return head; }
 
 int RegisterList::get_size() { 
   // return number of registers
-  int num = 0
+  int num = 0;
   if (head == nullptr) {
     // No registers, return 0
     return num;
   } else {
-    RegisterList* temp = head;
+    Register* temp = head;
     while (temp != nullptr) {
       num++;
       temp = temp->get_next();
@@ -120,7 +120,7 @@ Register* RegisterList::dequeue(int ID) {
         // Check if temp == nullptr, meaning if head is matching ID
         if (temp == nullptr) {
           // ID matches head, set new head to next and remove current head
-          set_head(dequeuedReg->get_next());
+          head = dequeuedReg->get_next(); //CHECK
         } else {
           // temp reg skips over the dequeued reg to the next reg in list
           temp->set_next(dequeuedReg->get_next());

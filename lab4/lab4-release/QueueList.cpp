@@ -23,9 +23,9 @@ void QueueList::enqueue(Customer* customer) {
     // Traverse to the end of queue list then insert customer
     Customer* temp = head;
     while(temp->get_next() != nullptr) {
-      temp = temp->getnext();
+      temp = temp->get_next();
     }
-    temp->set_next(customer)
+    temp->set_next(customer);
   }  
 }
 
@@ -39,7 +39,7 @@ Customer* QueueList::dequeue() {
     // Set head to head->next, return old head
     Customer* dequeuedCustomer = head;
     head = head->get_next();
-    return dequeudCustomer;
+    return dequeuedCustomer;
   }
   
 }
@@ -52,7 +52,7 @@ int QueueList::get_items() {
    } else {
     while (customer != nullptr) {
       // Loop through linked list and add total number of items
-      totalItems += customer->get_numofItems();
+      totalItems += customer->get_numOfItems();
       customer = customer->get_next();
     }
     return totalItems;
