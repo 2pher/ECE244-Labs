@@ -40,17 +40,19 @@ void Register::set_availableTime(double availableSince) {
 double Register::calculateDepartTime() {
   // Get the departure time of the first customer in the queue
   // returns -1 if no customer is in the queue
-  double departTime = -1;
-  if (queue != nullptr) {
+  double departTime;
+  if (queue != nullptr && queue->get_head() != nullptr) {
     // Customer has already been in line by time register becomes available; add reg available time
     if (queue->get_head()->get_arrivalTime() <= availableTime) {
       departTime = (secPerItem * queue->get_head()->get_numOfItems()) + overheadPerCustomer + availableTime;
     } else {
+
       // Customer arrives AFTER register becomes available; add arrival time instead
       departTime = (secPerItem * queue->get_head()->get_numOfItems()) + overheadPerCustomer + queue->get_head()->get_arrivalTime();
     }
+    return departTime;
   }
-  return departTime;
+  return -1;
 }
 
 void Register::departCustomer(QueueList* doneList) {

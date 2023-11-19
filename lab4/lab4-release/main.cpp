@@ -118,7 +118,6 @@ void addCustomer(stringstream &lineStream, string mode) {
   // fewest
   expTimeElapsed += timeElapsed;
   Customer* customer = new Customer(expTimeElapsed, items);
-  cout << "Hello" << endl;
   systemUpdate(mode); // Check for any customer departures BEFORE adding a customer
   cout << "A customer entered" << endl; // Default line for all customer entries
  
@@ -249,10 +248,16 @@ bool foundMoreArgs(stringstream &lineStream) {
  
 void systemUpdate(string mode) {
   Register* temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
+  Register* prev = nullptr;
   // We need to add departures of customer to done list in timely order
   while (temp != nullptr) {
     double departTime = temp->calculateDepartTime();
-    if (departTime >= expTimeElapsed) {
+
+    if (temp == prev) {
+      break;
+    }
+    
+    if (departTime <= expTimeElapsed) {
       temp->departCustomer(doneList);
       cout << "Departed a customer at register ID " << temp->get_ID() << " at " << departTime << endl;
 
@@ -261,6 +266,7 @@ void systemUpdate(string mode) {
         queueSingleCustomers();
       }
     }
+    prev = temp;
     temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   }
 }

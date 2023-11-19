@@ -140,24 +140,25 @@ Register* RegisterList::dequeue(int ID) {
 Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
   // return the register with minimum time of departure of its customer
   // if all registers are free, return nullptr
-  if (head == nullptr) {
-    return nullptr;
-  } else {
+  if (head != nullptr) {
     Register* minDepartTimeReg = head;
     Register* temp = head;
-    double minDepartTime = temp->calculateDepartTime();
-    while (temp != nullptr) {
-      if (temp->calculateDepartTime() < minDepartTime) {
-        // Lower depart time is found
-        minDepartTime = temp->calculateDepartTime();
-        minDepartTimeReg = temp;
+    if (temp->get_queue_list()->get_head() != nullptr) {
+      double minDepartTime = temp->calculateDepartTime();
+      while (temp != nullptr) {
+        if (temp->calculateDepartTime() < minDepartTime) {
+          // Lower depart time is found
+          minDepartTime = temp->calculateDepartTime();
+          minDepartTimeReg = temp;
+        }
+        temp = temp->get_next();
       }
-      temp = temp->get_next();
+      // Isolate the register
+      minDepartTimeReg->set_next(nullptr);
+      return minDepartTimeReg;
     }
-    // Isolate the register
-    minDepartTimeReg->set_next(nullptr);
-    return minDepartTimeReg;
   }
+  return nullptr;
 }
 
 void RegisterList::print() {
