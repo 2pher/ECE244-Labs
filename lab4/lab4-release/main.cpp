@@ -246,8 +246,6 @@ bool foundMoreArgs(stringstream &lineStream) {
 }
  
 void systemUpdate(string mode) {
-  cout << "REGISTER LIST: " << endl;
-  registerList->print();
   Register* temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   Register* prev = nullptr;
   // We need to add departures of customer to done list in timely order

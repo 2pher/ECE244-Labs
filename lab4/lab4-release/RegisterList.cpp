@@ -67,7 +67,6 @@ Register* RegisterList::get_free_register() {
   Register* freeReg = head;
   while (freeReg != nullptr) {
     if (freeReg->get_queue_list()->get_head() == nullptr) {
-      freeReg->set_next(nullptr);
       return freeReg;
     }
     freeReg = freeReg->get_next();
@@ -90,7 +89,6 @@ void RegisterList::enqueue(Register* newRegister) {
     temp->set_next(newRegister);
   }
   size++;
-  print();
 }
 
 bool RegisterList::foundRegister(int ID) {
@@ -127,7 +125,6 @@ Register* RegisterList::dequeue(int ID) {
           temp->set_next(dequeuedReg->get_next());
         }
         // Isolate dequeuedReg by setting next to nullptr
-        dequeuedReg->set_next(nullptr);
         return dequeuedReg;
       }
       // temp will be one place behind dequeuedReg in register list
@@ -155,7 +152,6 @@ Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
         temp = temp->get_next();
       }
       // Isolate the register
-      minDepartTimeReg->set_next(nullptr);
       return minDepartTimeReg;
     }
   }
