@@ -285,7 +285,8 @@ void queueSingleCustomers() {
 
 void printStatistics() {
   Customer* temp = doneList->get_head();
-  double waitTime = 0, maxWaitTime = 0, avgWaitTime = 0, stdDevWaitTime = 0, sumWaitTime = 0;
+  Customer* temp2 = doneList->get_head();
+  double waitTime = 0, maxWaitTime = 0, avgWaitTime = 0, stdDevWaitTime = 0, sumWaitTime = 0, waitAvgTimeDifference = 0;
   int customers = 0;
 
   while (temp != nullptr) {
@@ -300,8 +301,20 @@ void printStatistics() {
 
   if (doneList->get_head() != nullptr) {
     avgWaitTime = sumWaitTime/customers;
-    stdDevWaitTime = sqrt(pow(waitTime-avgWaitTime, 2)/customers);
   }
 
-  cout << "Finished at time " << expTimeElapsed << endl << "Statistics:" << endl << "Maximum wait time: " << maxWaitTime << endl << "Average wait time: " << avgWaitTime << endl << "Standard Deviation of wait time: " << stdDevWaitTime << endl;
+  while (temp2 != nullptr) {
+    waitAvgTimeDifference += pow(((temp2->get_departureTime()-temp2->get_arrivalTime()) - avgWaitTime), 2);
+    temp2 = temp2->get_next();
+  }
+
+  if (doneList->get_head() != nullptr) {
+    stdDevWaitTime = sqrt((waitAvgTimeDifference)/customers);
+  }
+
+  cout << "Finished at time " << expTimeElapsed << endl << 
+          "Statistics:" << endl << 
+          "Maximum wait time: " << maxWaitTime << endl << 
+          "Average wait time: " << avgWaitTime << endl << 
+          "Standard Deviation of wait time: " << stdDevWaitTime << endl;
 }

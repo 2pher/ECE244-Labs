@@ -142,26 +142,26 @@ Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
   Register* minDepartTimeReg = nullptr;
   Register* temp = head;
   // Check if register list is empty
-  while (temp != nullptr) {
-    // Check if there are any customers in the register's queue
-    if (temp->get_queue_list()->get_head() != nullptr) {
-      // Calculate that register's depart time
-      double minDepartTime = temp->calculateDepartTime();
-      if (temp->calculateDepartTime() <= minDepartTime) {
-        // If head has customer, automatically 
-        if (minDepartTimeReg == nullptr) {
-          minDepartTime = temp->calculateDepartTime();
-          minDepartTimeReg = temp;
-        } else {
-          if (temp->calculateDepartTime() < minDepartTime) {
+  if (temp != nullptr) {
+    double minDepartTime = temp->calculateDepartTime();
+    while (temp != nullptr) {
+      // Check if there are any customers in the register's queue
+      if (temp->get_queue_list()->get_head() != nullptr) {
+        // Compare register's depart time to current minimum
+        if (temp->calculateDepartTime() <= minDepartTime) {
+          // If head has customer, automatically 
+          if (minDepartTimeReg == nullptr) {
+            minDepartTime = temp->calculateDepartTime();
+            minDepartTimeReg = temp;
+          } else if (temp->calculateDepartTime() < minDepartTime) {
             minDepartTime = temp->calculateDepartTime();
             minDepartTimeReg = temp;
           }
         }
       }
-    }
-    temp = temp->get_next();
+      temp = temp->get_next();
 
+    }
   }
   return minDepartTimeReg;
 }
