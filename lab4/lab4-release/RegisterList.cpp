@@ -90,6 +90,7 @@ void RegisterList::enqueue(Register* newRegister) {
     temp->set_next(newRegister);
   }
   size++;
+  print();
 }
 
 bool RegisterList::foundRegister(int ID) {
@@ -120,7 +121,7 @@ Register* RegisterList::dequeue(int ID) {
         // Check if temp == nullptr, meaning if head is matching ID
         if (temp == nullptr) {
           // ID matches head, set new head to next and remove current head
-          head = dequeuedReg->get_next(); //CHECK
+          head = dequeuedReg->get_next();
         } else {
           // temp reg skips over the dequeued reg to the next reg in list
           temp->set_next(dequeuedReg->get_next());
