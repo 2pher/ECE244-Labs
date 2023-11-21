@@ -249,13 +249,8 @@ void systemUpdate(string mode) {
   Register* temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   Register* prev = nullptr;
   // We need to add departures of customer to done list in timely order
-  while (temp != nullptr) {
+  while (temp != nullptr && temp->get_queue_list()->get_head() != nullptr) {
     double departTime = temp->calculateDepartTime();
-
-    if (temp == prev) {
-      break;
-    }
-    
     if (departTime <= expTimeElapsed) {
       temp->departCustomer(doneList);
       cout << "Departed a customer at register ID " << temp->get_ID() << " at " << departTime << endl;
@@ -265,6 +260,11 @@ void systemUpdate(string mode) {
         queueSingleCustomers();
       }
     }
+    if (temp == prev) {
+      // Break to avoid infinte loop
+      break;
+    }
+
     prev = temp;
     temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   }

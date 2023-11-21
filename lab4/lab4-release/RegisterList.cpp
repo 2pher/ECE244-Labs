@@ -135,28 +135,67 @@ Register* RegisterList::dequeue(int ID) {
   return nullptr; // No register found; return nullptr
 }
 
+// This does it in the wrong order.
 Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
   // return the register with minimum time of departure of its customer
   // if all registers are free, return nullptr
-  if (head != nullptr) {
-    Register* minDepartTimeReg = head;
-    Register* temp = head;
+  Register* minDepartTimeReg = nullptr;
+  Register* temp = head;
+  // Check if register list is empty
+  while (temp != nullptr) {
+    // Check if there are any customers in the register's queue
     if (temp->get_queue_list()->get_head() != nullptr) {
+      // Calculate that register's depart time
       double minDepartTime = temp->calculateDepartTime();
-      while (temp != nullptr) {
+      if (temp->calculateDepartTime() <= minDepartTime) {
+        // If head has customer, automatically 
+        if (minDepartTimeReg == nullptr) {
+          minDepartTime = temp->calculateDepartTime();
+          minDepartTimeReg = temp;
+        } else {
+          if (temp->calculateDepartTime() < minDepartTime) {
+            minDepartTime = temp->calculateDepartTime();
+            minDepartTimeReg = temp;
+          }
+        }
+      }
+    }
+    temp = temp->get_next();
+
+  }
+  return minDepartTimeReg;
+}
+
+// Something broken about this one!!
+/*
+Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
+  // return the register with minimum time of departure of its customer
+  // if all registers are free, return nullptr
+  Register* minDepartTimeReg = head;
+  Register* temp = head;
+  cout << "Current register list: " << endl;
+  print();
+  // Check if register list is empty
+  if (temp != nullptr) {
+    while (temp != nullptr) {
+      // Check if there are any customers in the register's queue
+      if (temp->get_queue_list()->get_head() != nullptr) {
+        // Calculate that register's depart time
+        double minDepartTime = temp->calculateDepartTime();
         if (temp->calculateDepartTime() < minDepartTime) {
-          // Lower depart time is found
           minDepartTime = temp->calculateDepartTime();
           minDepartTimeReg = temp;
         }
-        temp = temp->get_next();
       }
-      // Isolate the register
-      return minDepartTimeReg;
+      // Function should traverse through the entire list
+      temp = temp->get_next();
+
     }
+    return minDepartTimeReg;
   }
   return nullptr;
 }
+*/
 
 void RegisterList::print() {
   Register* temp = head;
