@@ -134,7 +134,7 @@ void addCustomer(stringstream &lineStream, string mode) {
     Register* minItemsReg = registerList->get_min_items_register();
     // Queue customer in register queue
     minItemsReg->get_queue_list()->enqueue(customer);
-    cout << "Queued a customer with quickest register" << minItemsReg->get_ID() << endl;
+    cout << "Queued a customer with quickest register " << minItemsReg->get_ID() << endl;
   }
 }
 
@@ -174,6 +174,7 @@ void openRegister(stringstream &lineStream, string mode) {
   if (!registerList->foundRegister(ID)) {
     expTimeElapsed += timeElapsed;
     Register* newRegister = new Register(ID, secPerItem, setupTime, expTimeElapsed);
+    systemUpdate(mode);
     registerList->enqueue(newRegister);
     cout << "Opened register " << ID << endl;
     if (mode == "single") {
@@ -183,7 +184,7 @@ void openRegister(stringstream &lineStream, string mode) {
 
   } else {
     // Register ID already exists. Print error message.    
-    cout << "Error: register " << ID << " is already open." << endl;
+    cout << "Error: register " << ID << " is already open" << endl;
   }
 }
 
@@ -257,12 +258,22 @@ void systemUpdate(string mode) {
 
       if (mode == "single") {
       // For single queue, we need to add head of single queue list to head of free register queue
+        /*cout << "***BEFORE QUEUEING***" << endl;
+        temp->get_queue_list()->print();*/
         queueSingleCustomers();
+        /*cout << "***AFTER QUEUEING***" << endl;
+        temp->get_queue_list()->print();*/
       }
     }
-    if (temp == prev) {
-      // Break to avoid infinte loop
-      break;
+    if (prev != nullptr) {
+      if (temp->get_queue_list()->get_head() == prev->get_queue_list()->get_head()) {
+        /*cout << "***PREV QUEUE LIST*** " << prev->get_ID() << endl;
+        prev->get_queue_list()->print();
+        cout << "***CURR QUEUE LIST***" << temp->get_ID() << endl;
+        temp->get_queue_list()->print();
+        // Break to avoid infinte loop*/
+        break;
+      }
     }
 
     prev = temp;
