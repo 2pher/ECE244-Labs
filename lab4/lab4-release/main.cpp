@@ -250,7 +250,7 @@ void systemUpdate(string mode) {
   Register* temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   Register* prev = nullptr;
   // We need to add departures of customer to done list in timely order
-  while (temp != nullptr && temp->get_queue_list()->get_head() != nullptr) {
+  while (temp != nullptr) {
     double departTime = temp->calculateDepartTime();
     if (departTime <= expTimeElapsed) {
       temp->departCustomer(doneList);
@@ -258,26 +258,34 @@ void systemUpdate(string mode) {
 
       if (mode == "single") {
       // For single queue, we need to add head of single queue list to head of free register queue
-        /*cout << "***BEFORE QUEUEING***" << endl;
-        temp->get_queue_list()->print();*/
+        cout << "***BEFORE QUEUEING***" << endl;
+        temp->get_queue_list()->print();
         queueSingleCustomers();
-        /*cout << "***AFTER QUEUEING***" << endl;
-        temp->get_queue_list()->print();*/
+        cout << "***AFTER QUEUEING***" << endl;
+        temp->get_queue_list()->print();
       }
     }
     if (prev != nullptr) {
       if (temp->get_queue_list()->get_head() == prev->get_queue_list()->get_head()) {
-        /*cout << "***PREV QUEUE LIST*** " << prev->get_ID() << endl;
-        prev->get_queue_list()->print();
-        cout << "***CURR QUEUE LIST***" << temp->get_ID() << endl;
-        temp->get_queue_list()->print();
-        // Break to avoid infinte loop*/
-        break;
+        if ((temp->get_queue_list()->get_head() != nullptr)) {
+          cout << "***PREV QUEUE LIST*** " << prev->get_ID() << endl;
+          prev->get_queue_list()->print();
+          cout << "***CURR QUEUE LIST***" << temp->get_ID() << endl;
+          temp->get_queue_list()->print();
+          // Break to avoid infinte loop
+          break;
+        } else {
+          cout << "We have done it boys..." << endl;
+        }
       }
     }
 
     prev = temp;
     temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
+    if (temp == nullptr) {
+      cout << "EXITING SYSTEM UPDATE..." << endl << "REGISTER LIST: " << endl;
+      registerList->print();
+    }
   }
 }
 

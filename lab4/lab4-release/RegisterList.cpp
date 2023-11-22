@@ -137,23 +137,47 @@ Register* RegisterList::dequeue(int ID) {
 
 // This does it in the wrong order.
 Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
-  // return the register with minimum time of departure of its customer
-  // if all registers are free, return nullptr
   Register* minDepartTimeReg = nullptr;
   Register* temp = head;
-  double minDepartTime = 1e9; // Initialize to maximum possible value
+  Regsiter* temp2 = head;
+  double minDepartTime;
+  // Check if register list is empty
+  if (temp2 != nullptr) {
+    minDepartTime = temp2->calculateDepartTime();
 
-  while (temp != nullptr) {
-    // Check if there are any customers in the register's queue
-    if (temp->get_queue_list()->get_head() != nullptr) {
-      double departTime = temp->calculateDepartTime();
-      // Compare register's depart time to current minimum
-      if (departTime < minDepartTime) {
-        minDepartTime = departTime;
-        minDepartTimeReg = temp;
+    while (minDepartTime == -1) {
+      // While loop should stop if minDepartTime is found to be either than 1
+      // OR it reaches the end of the register list
+      // Breaks for the FIRST valid departure time it finds
+      if (temp2 == nullptr) {
+        break;
+      } else {
+        temp2 = temp2->get_next();
+        minDepartTime = temp2->calculateDepartTime();
+        if (minDepartTime != -1) {
+          minDepartTimeReg = temp2;
+        }
+      }    
+    }
+
+    if (minDepartTime == -1) {
+      // We traversed the whole list, and all depart times are -1
+      // This means all queues for registers are empty
+      return nullptr;
+    } else {
+      // NOW we traverse the entire list to compare depart times
+      while (temp != nullptr) {
+        // Check if there are any customers in the register's queue
+        if (temp->get_queue_list()->get_head() != nullptr) {
+          // Compare register's depart time to current minimum
+          if (temp->calculateDepartTime() < minDepartTime) {
+              minDepartTime = temp->calculateDepartTime();
+              minDepartTimeReg = temp;
+          }
+        }
+        temp = temp->get_next();
       }
     }
-    temp = temp->get_next();
   }
   return minDepartTimeReg;
 }
