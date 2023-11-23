@@ -82,6 +82,9 @@ int main() {
   printStatistics();
   // You have to make sure all dynamically allocated memory is freed 
   // before return 0
+  delete registerList;
+  delete doneList;
+  delete singleQueue;
   return 0;
 }
 
@@ -247,43 +250,33 @@ bool foundMoreArgs(stringstream &lineStream) {
 }
  
 void systemUpdate(string mode) {
+  // We need to add departures of customer to done list in timely order
   Register* temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   Register* prev = nullptr;
-  // We need to add departures of customer to done list in timely order
   while (temp != nullptr) {
     double departTime = temp->calculateDepartTime();
     if (departTime <= expTimeElapsed) {
       temp->departCustomer(doneList);
       cout << "Departed a customer at register ID " << temp->get_ID() << " at " << departTime << endl;
-
       if (mode == "single") {
-      // For single queue, we need to add head of single queue list to head of free register queue
-        //cout << "***BEFORE QUEUEING***" << endl;
-        //temp->get_queue_list()->print();
         queueSingleCustomers();
-        //cout << "***AFTER QUEUEING***" << endl;
-        //temp->get_queue_list()->print();
       }
     }
     if (prev != nullptr) {
       if (temp->get_queue_list()->get_head() == prev->get_queue_list()->get_head()) {
-        if ((temp->get_queue_list()->get_head() != nullptr)) {
-          //cout << "***PREV QUEUE LIST*** " << prev->get_ID() << endl;
-          //prev->get_queue_list()->print();
-          //cout << "***CURR QUEUE LIST***" << temp->get_ID() << endl;
-          //temp->get_queue_list()->print();
-          // Break to avoid infinte loop
-          break;
-        } else {
-          //cout << "We have done it boys..." << endl;
+        if (temp->get_queue_list()->get_head() != nullptr) {
+          if (temp->calculateDepartTime() == -1 || temp->calculateDepartTime() > expTimeElapsed) {
+            //cout << temp->calculateDepartTime() << " is less than " << expTimeElapsed << endl;
+            break;
+          }
         }
       }
     }
-
     prev = temp;
     temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
   }
 }
+
 
 void queueSingleCustomers() {
   if (singleQueue->get_head() != nullptr) {

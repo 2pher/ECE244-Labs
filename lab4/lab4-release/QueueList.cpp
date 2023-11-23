@@ -7,7 +7,11 @@ QueueList::QueueList() { head = nullptr; }
 QueueList::QueueList(Customer* customer) { head = customer; }
 
 QueueList::~QueueList() {
-  
+  while (head != nullptr) {
+    Customer* temp = head;
+    head = head->get_next();
+    delete temp;
+  }
 }
 
 Customer* QueueList::get_head() { return head; }

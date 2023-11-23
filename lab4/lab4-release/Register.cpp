@@ -16,7 +16,7 @@ Register::Register(int id, double timePerItem, double overhead,
                             // queue
 }
 
-Register::~Register() { }
+Register::~Register() { delete queue; }
 
 QueueList* Register::get_queue_list() { return queue; }
 
