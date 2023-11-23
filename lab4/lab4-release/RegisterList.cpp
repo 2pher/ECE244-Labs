@@ -139,44 +139,39 @@ Register* RegisterList::dequeue(int ID) {
 Register* RegisterList::calculateMinDepartTimeRegister(double expTimeElapsed) {
   Register* minDepartTimeReg = nullptr;
   Register* temp = head;
-  Regsiter* temp2 = head;
+  Register* temp2 = head;
   double minDepartTime;
   // Check if register list is empty
-  if (temp2 != nullptr) {
-    minDepartTime = temp2->calculateDepartTime();
-
-    while (minDepartTime == -1) {
-      // While loop should stop if minDepartTime is found to be either than 1
-      // OR it reaches the end of the register list
-      // Breaks for the FIRST valid departure time it finds
-      if (temp2 == nullptr) {
+  while (temp2 != nullptr) {
+    // While loop should stop if minDepartTime is found to be either than 1
+    // OR it reaches the end of the register list
+    // Breaks for the FIRST valid departure time it finds
+    if (temp2->get_queue_list()->get_head() != nullptr) {
+      minDepartTime = temp2->calculateDepartTime();
+      if (minDepartTime != -1) {
+        minDepartTimeReg = temp2;
         break;
-      } else {
-        temp2 = temp2->get_next();
-        minDepartTime = temp2->calculateDepartTime();
-        if (minDepartTime != -1) {
-          minDepartTimeReg = temp2;
-        }
-      }    
-    }
-
-    if (minDepartTime == -1) {
-      // We traversed the whole list, and all depart times are -1
-      // This means all queues for registers are empty
-      return nullptr;
-    } else {
-      // NOW we traverse the entire list to compare depart times
-      while (temp != nullptr) {
-        // Check if there are any customers in the register's queue
-        if (temp->get_queue_list()->get_head() != nullptr) {
-          // Compare register's depart time to current minimum
-          if (temp->calculateDepartTime() < minDepartTime) {
-              minDepartTime = temp->calculateDepartTime();
-              minDepartTimeReg = temp;
-          }
-        }
-        temp = temp->get_next();
       }
+    }
+    temp2 = temp2->get_next();
+  }
+
+  if (minDepartTime == -1) {
+    // We traversed the whole list, and all depart times are -1
+    // This means all queues for registers are empty
+    return nullptr;
+  } else {
+    // NOW we traverse the entire list to compare depart times
+    while (temp != nullptr) {
+      // Check if there are any customers in the register's queue
+      if (temp->get_queue_list()->get_head() != nullptr) {
+        // Compare register's depart time to current minimum
+        if (temp->calculateDepartTime() < minDepartTime) {
+            minDepartTime = temp->calculateDepartTime();
+            minDepartTimeReg = temp;
+        }
+      }
+      temp = temp->get_next();
     }
   }
   return minDepartTimeReg;

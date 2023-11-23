@@ -258,34 +258,30 @@ void systemUpdate(string mode) {
 
       if (mode == "single") {
       // For single queue, we need to add head of single queue list to head of free register queue
-        cout << "***BEFORE QUEUEING***" << endl;
-        temp->get_queue_list()->print();
+        //cout << "***BEFORE QUEUEING***" << endl;
+        //temp->get_queue_list()->print();
         queueSingleCustomers();
-        cout << "***AFTER QUEUEING***" << endl;
-        temp->get_queue_list()->print();
+        //cout << "***AFTER QUEUEING***" << endl;
+        //temp->get_queue_list()->print();
       }
     }
     if (prev != nullptr) {
       if (temp->get_queue_list()->get_head() == prev->get_queue_list()->get_head()) {
         if ((temp->get_queue_list()->get_head() != nullptr)) {
-          cout << "***PREV QUEUE LIST*** " << prev->get_ID() << endl;
-          prev->get_queue_list()->print();
-          cout << "***CURR QUEUE LIST***" << temp->get_ID() << endl;
-          temp->get_queue_list()->print();
+          //cout << "***PREV QUEUE LIST*** " << prev->get_ID() << endl;
+          //prev->get_queue_list()->print();
+          //cout << "***CURR QUEUE LIST***" << temp->get_ID() << endl;
+          //temp->get_queue_list()->print();
           // Break to avoid infinte loop
           break;
         } else {
-          cout << "We have done it boys..." << endl;
+          //cout << "We have done it boys..." << endl;
         }
       }
     }
 
     prev = temp;
     temp = registerList->calculateMinDepartTimeRegister(expTimeElapsed);
-    if (temp == nullptr) {
-      cout << "EXITING SYSTEM UPDATE..." << endl << "REGISTER LIST: " << endl;
-      registerList->print();
-    }
   }
 }
 
