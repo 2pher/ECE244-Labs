@@ -19,6 +19,27 @@ using namespace std;
 
 // This class implements the rectangle Shape objects.
 // ECE244 Student: Write the definition of the class here.
+#include "Shape.h"
+
+class Rectangle : public Shape {
+private:
+    float Width;
+    float Height;      
+
+public:
+    // Constructor
+    Rectangle (string n, float width, float height);
+    
+    // Destructor
+    virtual ~Rectangle();
+    
+    // Utility methods
+    virtual void draw() const; 
+    
+    virtual float computeArea() const; 
+    
+    virtual Shape* clone() const;
+};
 
 #endif /* Rectangle_h */
 

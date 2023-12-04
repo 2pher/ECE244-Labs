@@ -11,3 +11,41 @@
 
 //  ECE244 Student: Write the implementation of the class here
 
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+#include "Shape.h"
+#include "Rectangle.h"
+
+// Build a Circle object
+Rectangle::Rectangle(string n, float width, float height):Shape(n, width/2, height/2) {
+    Width = width;
+    Height = height;
+}
+
+Rectangle::~Rectangle() {
+    // Nothing to do
+}
+
+void Rectangle::draw() const {
+    // Set floating point printing to fixed point with 2 decimals
+    cout << std::fixed;
+    cout << std::setprecision(2);
+    
+    // Print the information
+    cout << "rectangle: " << name << " "
+         << x_centre << " " << y_centre
+         << " " << Width << " " << Height 
+         << " " <<  computeArea()
+         << endl;
+}
+
+float Rectangle::computeArea() const {
+    return (Width * Height);
+}
+
+Shape* Rectangle::clone() const {
+    return (new Triangle(*this));
+}
