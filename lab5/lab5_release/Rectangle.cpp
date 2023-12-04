@@ -20,7 +20,7 @@ using namespace std;
 #include "Rectangle.h"
 
 // Build a Circle object
-Rectangle::Rectangle(string n, float width, float height):Shape(n, width/2, height/2) {
+Rectangle::Rectangle(string n, float xcent, float ycent, float width, float height):Shape(n, xcent, ycent) {
     Width = width;
     Height = height;
 }
@@ -47,5 +47,5 @@ float Rectangle::computeArea() const {
 }
 
 Shape* Rectangle::clone() const {
-    return (new Triangle(*this));
+    return (new Rectangle(*this));
 }

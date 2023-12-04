@@ -28,7 +28,7 @@ private:
 
 public:
     // Constructor
-    Rectangle (string n, float width, float height);
+    Rectangle (string n, float xcent, float ycent, float width, float height);
     
     // Destructor
     virtual ~Rectangle();

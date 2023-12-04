@@ -33,10 +33,10 @@ private:
 
 public:
     // Constructor
-    Triangle (string n, float x1, float, y1, float x2, float y2, float x3, float y3);
+    Triangle (string n, float x1, float y1, float x2, float y2, float x3, float y3);
 
     // Destructor
-    virtual ~Circle();
+    virtual ~Triangle();
 
     // Utility methods
     virtual void draw() const;
@@ -44,7 +44,7 @@ public:
     virtual float computeArea() const;
 
     virtual Shape* clone() const;
-}
+};
 
 
 #endif /* Triangle_h */
