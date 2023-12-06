@@ -2,7 +2,7 @@
 using namespace std;
 
 // Conversion constants
-#define CtoFRatio 1.80
+#define CtoFRatio 1.80 
 #define CtoFOffset 32.00
 #define CtoKOffset 273.0
 
